@@ -4,6 +4,9 @@ import java.util.Scanner;
 public class GpaCalculator {
     private static Scanner userInput = new Scanner(System.in);
     private static int amountOfClasses;
+    private static double[] classGrades;
+    private static double[] classUnits;
+
 
     public static void main(String[] args){
         run();
@@ -14,12 +17,12 @@ public class GpaCalculator {
             System.out.print("Enter the amount of classes you took: ");
             amountOfClasses = userInput.nextInt();
             System.out.println();
-            double[] classGrades = new double[amountOfClasses];
-            double[] classUnits = new double[amountOfClasses];
-            fillInClassGrades(classGrades);
-            fillInClassUnits(classUnits);
-            double unWeightedGpa = calculateUnWeightedGpa(classGrades);
-            double weightedGpa = calculateWeightedGpa(classGrades, classUnits);
+            classGrades = new double[amountOfClasses];
+            classUnits = new double[amountOfClasses];
+            fillInClassGrades();
+            fillInClassUnits();
+            double unWeightedGpa = calculateUnWeightedGpa();
+            double weightedGpa = calculateWeightedGpa();
             System.out.println("UnWeighted GPA: " + unWeightedGpa);
             System.out.println("Weighted GPA: " + weightedGpa);
         } catch (InputMismatchException invalidTypeEntered) {
@@ -28,17 +31,17 @@ public class GpaCalculator {
         }
     }
 
-    public static double[] fillInClassGrades(double[] classGrades){
+    public static void fillInClassGrades(){
         printGradeChart();
-        System.out.println("\nUsing the above chart please fill out " +
-                           "your grades\n");
+        System.out.println("""
+                Using the above chart please fill out your grades
+                """);
         for(int classNumber = 1; classNumber <= amountOfClasses; classNumber++){
             System.out.print("What grade did you get in class# " +
                             classNumber + ": ");
             classGrades[classNumber - 1] = userInput.nextDouble();
         }
         System.out.println();
-        return classGrades;
     }
 
     public static void printGradeChart(){
@@ -59,25 +62,23 @@ public class GpaCalculator {
         System.out.println("F  = 0.0");
     }
 
-    public static double[] fillInClassUnits(double[] classUnits){
+    public static void fillInClassUnits(){
         for(int classNumber = 1; classNumber <= amountOfClasses; classNumber++){
             System.out.print("How many units is class# " + classNumber + ": ");
             classUnits[classNumber - 1] = userInput.nextDouble();
         }
         System.out.println();
-        return classUnits;
     }
 
-    public static double calculateUnWeightedGpa(double[] classGrades){
+    public static double calculateUnWeightedGpa(){
         double gradePointSum = 0.0;
         for(double gradePoint: classGrades)
             gradePointSum += gradePoint;
         return gradePointSum/amountOfClasses;
     }
 
-    public static double calculateWeightedGpa(double[] classGrades,
-                                              double[] classUnits){
-        double unWeightedGpa = calculateUnWeightedGpa(classGrades);
+    public static double calculateWeightedGpa(){
+        double unWeightedGpa = calculateUnWeightedGpa();
         double amountOfCredits = 0.0;
         for(double course: classUnits)
             amountOfCredits += course;
