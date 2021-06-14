@@ -13,8 +13,6 @@ public class GpaCalculatorView extends Component implements ActionListener {
     private static double[] units;
     private JLabel unWeightedGpa;
     private JLabel weightedGpa;
-    private JLabel gradeTitle;
-    private JLabel unitTitle;
     private JButton nextButton; // next page
     private JButton backButton; // back one page
     private JButton resetButton;
@@ -57,8 +55,8 @@ public class GpaCalculatorView extends Component implements ActionListener {
         gpaWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gpaWindow.setSize(350,400);
         gpaWindow.setLayout(new GridLayout(3,2));
-        gradeTitle = new JLabel("Enter your grade below");
-        unitTitle = new JLabel("Enter units below");
+        JLabel gradeTitle = new JLabel("Enter your grade below");
+        JLabel unitTitle = new JLabel("Enter units below");
         grade = new JTextField();
         unit = new JTextField();
         nextButton = new JButton("next");
@@ -111,7 +109,7 @@ public class GpaCalculatorView extends Component implements ActionListener {
     }
 
     private void clickedNextButton() {
-        checkData();
+        checkIfDataEnteredIsANumber();
         if(amountOfClasses == classCount){
             double unWeightedGpa = calculateUnWeightedGpa();
             double weightedGpa = calculateWeightedGpa();
@@ -127,7 +125,7 @@ public class GpaCalculatorView extends Component implements ActionListener {
         unit.setText("");
     }
 
-    private void checkData() {
+    private void checkIfDataEnteredIsANumber() {
         try {
             grades[classCount] = Double.parseDouble(grade.getText());
             units[classCount] = Double.parseDouble(grade.getText());
@@ -141,12 +139,7 @@ public class GpaCalculatorView extends Component implements ActionListener {
             panel.add(new JLabel("Error detected. \n" +
                     "Please enter a number into both boxes."), constraints);
             JButton okay = new JButton("Okay");
-            okay.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    SwingUtilities.windowForComponent(okay).dispose();
-                }
-            });
+            okay.addActionListener(e -> SwingUtilities.windowForComponent(okay).dispose());
             panel.add(okay, constraints);
             dialog.add(panel);
             dialog.pack();
