@@ -7,6 +7,7 @@ import java.util.Arrays;
 public class GpaCalculatorView extends Component implements ActionListener {
     private JFrame gpaWindow;
     private JFrame gpaCalculatedWindow;
+    private JFrame welcomeWindow;
     private JTextField grade;
     private JTextField unit;
     private static double[] grades;
@@ -16,19 +17,43 @@ public class GpaCalculatorView extends Component implements ActionListener {
     private JButton nextButton; // next page
     private JButton backButton; // back one page
     private JButton resetButton;
+    private JButton gradeScalePopup;
+    private JButton startButton;
     private static final int amountOfClasses = 1;
     private static int classCount = 0;
 
     public static void main(String [] args){
-        GpaCalculatorView view = new GpaCalculatorView();
+        GpaCalculatorView view = new GpaCalculatorView(); // this is here to start the program.
     }
 
 
     public GpaCalculatorView(){
         grades = new double[amountOfClasses];
         units = new double[amountOfClasses];
-        initializeGpaCalculatorWindow();
-        initializeCalculatedWindow();
+        initializeWelcomeScreen();
+    }
+
+    private void initializeWelcomeScreen() {
+        welcomeWindow = new JFrame();
+        welcomeWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        welcomeWindow.setSize(350,400);
+        welcomeWindow.setLayout(new GridLayout(2,1));
+        JLabel welcomeMessage = new JLabel("<html>Welcome. This is a Gpa " +
+                                               "Calculator that will " +
+                                               "calculate weighted and " +
+                                               "unweighted grade.<br/><br/>" +
+                                               "When ready click the start " +
+                                               "button<html>");
+        JPanel buttonHolder = new JPanel(new GridLayout(1,2));
+        gradeScalePopup = new JButton("grade scale");
+        startButton = new JButton("start");
+        gradeScalePopup.addActionListener(this);
+        startButton.addActionListener(this);
+        buttonHolder.add(gradeScalePopup);
+        buttonHolder.add(startButton);
+        welcomeWindow.add(welcomeMessage);
+        welcomeWindow.add(buttonHolder);
+        welcomeWindow.setVisible(true);
     }
 
     private void initializeCalculatedWindow() {
@@ -91,6 +116,51 @@ public class GpaCalculatorView extends Component implements ActionListener {
         else if(buttonClicked.getSource() == resetButton){
             clickedResetButton();
         }
+        else if(buttonClicked.getSource() == gradeScalePopup){
+            clickedGradePopup();
+        }
+        else{
+            clickedStartButton();
+        }
+    }
+
+    private void clickedStartButton() {
+        welcomeWindow.setVisible(false);
+        initializeGpaCalculatorWindow();
+        initializeCalculatedWindow();
+    }
+
+    private void clickedGradePopup() {
+        JDialog popup = new JDialog(SwingUtilities.windowForComponent(this));
+        popup.setModalityType(Dialog.ModalityType.DOCUMENT_MODAL);
+        JPanel window = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
+        window.add(new JLabel(""" 
+                <html>
+                Grade Breakdown: <br/>
+                A+ = 4.0<br/>
+                A  = 4.0<br/>
+                A- = 3.7<br/>
+                B+ = 3.3<br/>
+                B  = 3.0<br/>
+                B- = 2.7<br/>
+                C+ = 2.3<br/>
+                C  = 2.0<br/>
+                C- = 1.7<br/>
+                D+ = 1.3<br/>
+                D  = 1.0<br/>
+                D- = 0.7<br/>
+                F  = 0.0
+                <html>"""), constraints);
+        JButton close = new JButton("Close");
+        close.addActionListener(e -> SwingUtilities.windowForComponent(close)
+                                .dispose());
+        window.add(close, constraints);
+        popup.add(window);
+        popup.pack();
+        popup.setLocationRelativeTo(gpaWindow);
+        popup.setVisible(true);
     }
 
     private void clickedResetButton() {
@@ -139,7 +209,8 @@ public class GpaCalculatorView extends Component implements ActionListener {
             panel.add(new JLabel("Error detected. \n" +
                     "Please enter a number into both boxes."), constraints);
             JButton okay = new JButton("Okay");
-            okay.addActionListener(e -> SwingUtilities.windowForComponent(okay).dispose());
+            okay.addActionListener(e -> SwingUtilities.windowForComponent(okay)
+                                   .dispose());
             panel.add(okay, constraints);
             dialog.add(panel);
             dialog.pack();
