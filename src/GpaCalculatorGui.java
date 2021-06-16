@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
-public class GpaCalculatorView extends Component implements ActionListener {
+public class GpaCalculatorGui extends Component implements ActionListener {
     private JFrame gpaWindow;
     private JFrame gpaCalculatedWindow;
     private JFrame welcomeWindow;
@@ -18,16 +18,15 @@ public class GpaCalculatorView extends Component implements ActionListener {
     private JButton backButton; // back one page
     private JButton resetButton;
     private JButton gradeScalePopup;
-    private JButton startButton;
     private static final int amountOfClasses = 1;
     private static int classCount = 0;
 
     public static void main(String [] args){
-        GpaCalculatorView view = new GpaCalculatorView(); // this is here to start the program.
+        GpaCalculatorGui view = new GpaCalculatorGui(); // this is here to start the program.
     }
 
 
-    public GpaCalculatorView(){
+    public GpaCalculatorGui(){
         grades = new double[amountOfClasses];
         units = new double[amountOfClasses];
         initializeWelcomeScreen();
@@ -46,7 +45,7 @@ public class GpaCalculatorView extends Component implements ActionListener {
                                                "button<html>");
         JPanel buttonHolder = new JPanel(new GridLayout(1,2));
         gradeScalePopup = new JButton("grade scale");
-        startButton = new JButton("start");
+        JButton startButton = new JButton("start");
         gradeScalePopup.addActionListener(this);
         startButton.addActionListener(this);
         buttonHolder.add(gradeScalePopup);
@@ -95,13 +94,6 @@ public class GpaCalculatorView extends Component implements ActionListener {
         gpaWindow.add(backButton);
         gpaWindow.add(nextButton);
         gpaWindow.setVisible(true);
-    }
-
-
-    public void updateGpaCalculatedWindow(double unWeightedGpa,
-                                          double weightedGpa){
-        this.unWeightedGpa.setText(String.valueOf(unWeightedGpa));
-        this.weightedGpa.setText(String.valueOf(weightedGpa));
     }
 
 
@@ -235,5 +227,12 @@ public class GpaCalculatorView extends Component implements ActionListener {
         double unWeightedTimesCredits = unWeightedGpa * amountOfCredits;
         return (double) (Math.round(unWeightedTimesCredits / amountOfCredits *
                               100)/100);
+    }
+
+
+    public void updateGpaCalculatedWindow(double unWeightedGpa,
+                                          double weightedGpa){
+        this.unWeightedGpa.setText(String.valueOf(unWeightedGpa));
+        this.weightedGpa.setText(String.valueOf(weightedGpa));
     }
 }

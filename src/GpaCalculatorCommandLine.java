@@ -1,7 +1,7 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class GpaCalculator {
+public class GpaCalculatorCommandLine {
     private static Scanner userInput = new Scanner(System.in);
     private static int amountOfClasses;
     private static double[] classGrades;
